@@ -11,9 +11,13 @@ interface IProps {
 
 const List: React.FC<IProps> = ({people}) => {
     return (
-        <div>
-            I am a list
-        </div>
+    <ul>
+       {people.map(person=>{
+           return (
+               <div>{person.name}</div>
+           )
+       })} 
+    </ul>
     )
 }
 
