@@ -1,6 +1,13 @@
+import { parse } from 'path';
 import React, { useState } from 'react';
+import { IState as Props } from '../App';
 
-const AddToList = () => {
+interface IProps {
+	people: Props['people'];
+	setPeople: React.Dispatch<React.SetStateAction<Props["people"]>>;
+}
+
+const AddToList:React.FC<IProps> = ({people,setPeople}) => {
 	const [input, setinput] = useState({
 		name: '',
 		age: '',
@@ -8,12 +15,40 @@ const AddToList = () => {
 		img: '',
 	});
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> ) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> ):void => {
 		setinput({
 			...input,
 			[e.target.name]: e.target.value,
 		});
 	};
+
+	const handleClick=():void=>{
+		if(
+			!input.name || 
+			!input.age||
+			!input.img
+		){
+			return
+		}
+
+		setPeople([
+			...people,
+			{
+				name: input.name,
+				age:parseInt(input.age),
+				url:input.img,
+				note: input.note
+			}
+		])
+
+		setinput({
+			name: '',
+			age: '',
+			note: '',
+			img: '',
+		});
+
+	}
 
 	return (
 		<div className='AddToList'>
@@ -26,7 +61,7 @@ const AddToList = () => {
 				name='name'
 			/>
 			<input
-				type='text'
+				type='number'
 				placeholder='Age'
 				className='AddToList-input'
 				value={input.age}
@@ -48,6 +83,11 @@ const AddToList = () => {
 				onChange={handleChange}
 				name='note'
 			/>
+			<button className="AddToList-btn"
+			onClick={handleClick}
+			>
+				Add to List
+			</button>
 		</div>
 	);
 };
